@@ -1,0 +1,94 @@
+DATASET:
+  TRAIN:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: train+val
+    DATA_ROOT: data
+    SPLIT_MODE: subject
+    USE_PACK: true
+    WITH_VERTS_2D: true
+    WITH_HAND_FACES: true
+    AUG: true
+    AUG_PARAM:
+      SCALE_JIT: 0.125
+      COLOR_JIT: 0.3
+      ROT_JIT: 60
+      ROT_PROB: 1.0
+      OCCLUSION: True
+      OCCLUSION_PROB: 0.1
+
+  TEST:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: test
+    DATA_ROOT: data
+    SPLIT_MODE: subject
+    USE_PACK: true
+    WITH_VERTS_2D: true
+    WITH_HAND_FACES: true
+    AUG: false
+    AUG_PARAM: None
+
+DATA_PRESET:
+  PRESET_TYPE: ""
+  USE_CACHE: true
+  BBOX_EXPAND_RATIO: 1.7
+  IMAGE_SIZE: [256, 256]
+  CENTER_IDX: 0
+  HEATMAP_SIZE:
+  - 64
+  - 64
+  - 64
+
+TRAIN:
+  MANUAL_SEED: 874449194
+  CONV_REPEATABLE: true
+  BATCH_SIZE: 128
+  EPOCH: 100
+  OPTIMIZER: adam
+  LR: 0.0001
+  WEIGHT_DECAY: 0.0
+  SCHEDULER: MultiStepLR
+  LR_DECAY_STEP: [20, 40]
+  LR_DECAY_GAMMA: 0.1
+  FIND_UNUSED_PARAMETERS: True
+  GRAD_CLIP_ENABLED: true
+  GRAD_CLIP:
+    NORM: 35.
+    TYPE: 2
+
+MODEL:
+  TYPE: I2L_MeshNet
+  PRETRAINED: ""
+  STAGE: lixel
+  HEATMAP_SIGMA: 2.5
+  POSE_BACKBONE:
+    RESNET_TYPE: 50
+  MESH_BACKBONE:
+    RESNET_TYPE: 50
+  NUM_FC_FILTERS: [-1]
+  LOSS:
+    TYPE: I2L_MeshNet_Loss
+    LAMBDA_JOINT_FIT: 1.0
+    LAMBDA_MESH_FIT: 1.0
+    LAMBDA_MESH_JOINT_FIT: 1.0
+    LAMBDA_MESH_NORMAL: 0.1
+    LAMBDA_MESH_EDGE: 1.0
+    LAMBDA_POSE_PARAM: 0.0
+    LAMBDA_SHAPE_PARAM: 0.0
+    LAMBDA_JOINT_FIT_CAM: 0.0
+
+  METRIC:
+    - TYPE: LossMetric
+      VIS_LOSS_KEYS: []
+    - TYPE: MeanEPE
+      NAME: joints_3d
+      PRED_KEY: joints_3d
+      GT_KEY: target_joints_3d
+    - TYPE: MeanEPE2
+      NAME: verts_3d
+      PRED_KEY: verts_3d
+      GT_KEY: target_verts_3d
+    - TYPE: PAEval
+      MESH_SCORE: False
+    - TYPE: I2L_MeshNet_Vis_Metric

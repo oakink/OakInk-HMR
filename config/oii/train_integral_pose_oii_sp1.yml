@@ -1,0 +1,87 @@
+DATASET:
+  TRAIN:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: train+val
+    DATA_ROOT: data
+    SPLIT_MODE: subject
+    USE_PACK: true
+    AUG: true
+    AUG_PARAM:
+      SCALE_JIT: 0.125
+      COLOR_JIT: 0.3
+      ROT_JIT: 60
+      ROT_PROB: 1.0
+      OCCLUSION: True
+      OCCLUSION_PROB: 0.1
+
+  TEST:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: test
+    DATA_ROOT: data
+    SPLIT_MODE: subject
+    USE_PACK: true
+    AUG: false
+    AUG_PARAM: None
+
+
+DATA_PRESET:
+  PRESET_TYPE: ""
+  USE_CACHE: true
+  BBOX_EXPAND_RATIO: 1.7
+  IMAGE_SIZE: [224, 224]
+  CENTER_IDX: 9  # FreiHAND dataset must be 9
+
+TRAIN:
+  MANUAL_SEED: 874449194
+  CONV_REPEATABLE: True
+  BATCH_SIZE: 256
+  EPOCH: 100
+  OPTIMIZER: adam
+  LR: 0.001
+  SCHEDULER: MultiStepLR
+  LR_DECAY_STEP: [70,]
+  LR_DECAY_GAMMA: 0.1
+  WEIGHT_DECAY: 0.0
+  FIND_UNUSED_PARAMETERS: True
+  GRAD_CLIP_ENABLED: True
+  GRAD_CLIP:
+    NORM: 0.1
+    TYPE: 2
+
+
+MODEL:
+  TYPE: IntegralPose
+  PRETRAINED: ""
+  MODE: 3D
+  BACKBONE: 
+    TYPE: resnet50
+    PRETRAINED: True
+    FREEZE_BATCHNORM: True
+
+  HEAD:
+    INPUT_CHANNEL: 2048
+    N_CLASSES: 21
+    DECONV_WITH_BIAS: False
+    NORM_TYPE: "sigmoid"
+    HEATMAP_3D_SIZE: [28, 28, 28]
+    NUM_DECONV_LAYERS: 2
+    NUM_DECONV_FILTERS: [256, 256]
+    NUM_DECONV_KERNELS: [4, 4]
+    FINAL_CONV_KERNEL: 1
+
+  LOSS:
+  - TYPE: "UVD_LOSS"
+    FUNCTION: "smooth_l1"
+    LAMBDA: 100.0
+  
+  METRIC:
+  - TYPE: LossMetric
+    VIS_LOSS_KEYS: []
+  - TYPE: Integal_Pose_Vis_Metric
+  - TYPE: MeanEPE
+    NAME: joints_3d
+    PRED_KEY: joints_3d
+    GT_KEY: target_joints_3d
+

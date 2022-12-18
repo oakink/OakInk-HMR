@@ -1,0 +1,15 @@
+name: oakink-benchmark
+channels:
+  - defaults
+dependencies:
+  - python==3.8.11
+  - pip==22.1.2
+  - setuptools
+  - cython
+  - nvidia::cudatoolkit=11.3
+  - numpy
+  - pillow
+  - pytorch::pytorch=1.11.0
+  - bottler::nvidiacub
+  - pytorch::torchaudio=0.11.0
+  - pytorch::torchvision=0.12.0

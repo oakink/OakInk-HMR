@@ -1,0 +1,75 @@
+DATASET:
+  TRAIN:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: train+val
+    DATA_ROOT: data
+    SPLIT_MODE: default
+    USE_PACK: true
+    AUG: true
+    AUG_PARAM:
+      SCALE_JIT: 0.125
+      COLOR_JIT: 0.3
+      ROT_JIT: 60
+      ROT_PROB: 1.0
+      OCCLUSION: True
+      OCCLUSION_PROB: 0.1
+
+  TEST:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: test
+    DATA_ROOT: data
+    SPLIT_MODE: default
+    USE_PACK: true
+    AUG: false
+    AUG_PARAM: None
+
+DATA_PRESET:
+  PRESET_TYPE: ""
+  USE_CACHE: true
+  BBOX_EXPAND_RATIO: 1.7
+  IMAGE_SIZE: [224, 224]
+  CENTER_IDX: 0
+
+TRAIN:
+  MANUAL_SEED: 874449194
+  CONV_REPEATABLE: true
+  BATCH_SIZE: 256
+  EPOCH: 200
+  OPTIMIZER: adam
+  LR: 0.001
+  WEIGHT_DECAY: 0.0
+  SCHEDULER: MultiStepLR
+  LR_DECAY_STEP: [90, 120]
+  LR_DECAY_GAMMA: 0.1
+  FIND_UNUSED_PARAMETERS: True
+  GRAD_CLIP_ENABLED: true
+  GRAD_CLIP:
+    NORM: 35.
+    TYPE: 2
+
+MODEL:
+  TYPE: CMR_G
+  # PRETRAINED: "exp/default_2022_0511_0214_30/checkpoints/checkpoint_100/BiHand2DPlus.pth.tar"
+  PRETRAINED: null
+  IN_CHANNELS: 3
+  OUT_CHANNELS: [64, 128, 256, 512]
+  DATASET: FreiHAND
+  BACKBONE: ResNet18
+  ATT: false
+  METRIC:
+    TYPE: PAEval
+    MESH_SCORE: True
+  LOSS:
+    TYPE: CMR_G_LOSS
+  METRIC:
+    - TYPE: LossMetric
+      VIS_LOSS_KEYS: []
+    - TYPE: MeanEPE
+      NAME: joints_3d
+      PRED_KEY: joints_3d
+      GT_KEY: target_joints_3d
+    - TYPE: PAEval
+      MESH_SCORE: False
+    - TYPE: CMR_G_Vis_Metric

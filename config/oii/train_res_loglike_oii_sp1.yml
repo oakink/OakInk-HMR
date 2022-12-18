@@ -1,0 +1,73 @@
+DATASET:
+  TRAIN:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: train+val
+    DATA_ROOT: data
+    SPLIT_MODE: subject
+    USE_PACK: true
+    AUG: true
+    AUG_PARAM:
+      SCALE_JIT: 0.125
+      COLOR_JIT: 0.3
+      ROT_JIT: 60
+      ROT_PROB: 1.0
+      OCCLUSION: True
+      OCCLUSION_PROB: 0.1
+
+  TEST:
+    TYPE: OakInk
+    DATA_MODE: 3D
+    DATA_SPLIT: test
+    DATA_ROOT: data
+    SPLIT_MODE: subject
+    USE_PACK: true
+    AUG: false
+    AUG_PARAM: None
+
+DATA_PRESET:
+  PRESET_TYPE: ""
+  USE_CACHE: true
+  BBOX_EXPAND_RATIO: 1.7
+  IMAGE_SIZE: [224, 224]
+  CENTER_IDX: 0
+
+TRAIN:
+  MANUAL_SEED: 874449194
+  CONV_REPEATABLE: true
+  BATCH_SIZE: 256
+  EPOCH: 100
+  OPTIMIZER: adam
+  LR: 0.001
+  WEIGHT_DECAY: 0.0
+  SCHEDULER: MultiStepLR
+  LR_DECAY_STEP: [30, 60]
+  LR_DECAY_GAMMA: 0.1
+  FIND_UNUSED_PARAMETERS: True
+  GRAD_CLIP_ENABLED: true
+  GRAD_CLIP:
+    NORM: 35.
+    TYPE: 2
+
+MODEL:
+  TYPE: RegressFlow3D
+  PRETRAINED: null
+  MODE: 3D
+  BACKBONE:
+    TYPE: resnet50
+    PRETRAINED: True
+    FREEZE_BATCHNORM: True
+  NUM_FC_FILTERS: [-1]
+  LOSS:
+    TYPE: RLE_Loss
+    SIZE_AVERAGE: true
+  METRIC:
+    - TYPE: LossMetric
+      VIS_LOSS_KEYS: []
+    - TYPE: MeanEPE
+      NAME: joints_3d
+      PRED_KEY: joints_3d
+      GT_KEY: target_joints_3d
+    - TYPE: PAEval
+      MESH_SCORE: False
+    - TYPE: RLE_Vis_Metric
