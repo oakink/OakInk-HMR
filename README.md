@@ -30,11 +30,15 @@ data
     └── image
 ```
 
-### b.3 checkpoints
+## b.3 pack annotations
 
-`cd ./checkpoints`
+To avoid opening too many small files in pytorch dataloaders which might exceed user limit, annotations need to be packed into a single archive for each sample.
 
-在`checkpoints`文件夹内提供已经训好的网络的权重 <!-- todo -->
+1. Follow instructions in `OakInk` repo to install oikit.
+2. Run following instructions (`default` and `train+val` is for illustration, they can be changed to the desired split)
+   ```bash
+   python dev/pack_oakink_image.py --mode_split default --data_split train+val
+   ```
 
 
 ## C. Model Zoo
