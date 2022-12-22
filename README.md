@@ -1,12 +1,21 @@
 ## A. Install
 
-### a.1 Create oakink-benchmark env
+### a.1 (Option 1) Create oakink-benchmark env
 
 ```shell
 conda env create -f environment.yml
 conda activate oakink-benchmark
 pip install -r requirements.txt
 ```
+
+### a.2 (Option 2) install extra packages in existing `oakink` conda env
+
+If [`OakInk`](https://github.com/oakink/OakInk) env is already installed, you just need to install the extra packages required for benchmark.
+1. comment out `manotorch` and `pytorch3d` in `requirements.txt` with `#`
+2. ```shell
+   pip install -r requirements.txt
+   ```
+3. restore `requirements.txt`
 
 ## B. Link Data
 
@@ -35,7 +44,7 @@ data
 To avoid opening too many small files in pytorch dataloaders which might exceed user limit, annotations need to be packed into a single archive for each sample.
 
 1. Follow instructions in `OakInk` repo to install oikit.
-2. Run following instructions (`default` and `train+val` is for illustration, they can be changed to the desired split)
+2. Run following instructions (`default` and `train+val` are for illustration, they can be changed to the desired split)
    ```bash
    python dev/pack_oakink_image.py --mode_split default --data_split train+val
    ```
