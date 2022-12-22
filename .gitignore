@@ -146,7 +146,7 @@ fail_images/**
 /paper_images/**
 /thirdparty/
 # *.json
-*.png
+# *.png
 
 render/YCB_Affordance/**
 

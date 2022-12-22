@@ -1,4 +1,4 @@
-name: oakink-benchmark
+name: oakink-bm-img
 channels:
   - defaults
 dependencies:

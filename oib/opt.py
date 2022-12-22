@@ -61,6 +61,9 @@ def parse_exp_args():
 
     if arg.gpu_id is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = arg.gpu_id
+    else:
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 
     arg.n_gpus = torch.cuda.device_count()
     arg.device = "cuda" if torch.cuda.is_available() else "cpu"
