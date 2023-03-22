@@ -47,15 +47,19 @@ To download the dataset, please visit the [official website](https://oakink.net)
 
 ### Option 1. Create `oakink-bm-img` conda env (recommended)
 
+First, create a new conda env and install the required packages.
+
 ```bash
 conda env create -f environment.yml
 conda activate oakink-bm-img
 pip install -r requirements.txt
 ```
 
-### Option 2. install extra packages in existing `oakink` conda env
+Then, download our [**oikit**](https://github.com/oakink/OakInk), and install it in the `oakink-bm-img` conda env (follow the instruction: [**_import-as-package_**](https://github.com/oakink/OakInk#import-as-package-recommended)).
 
-If a **_stand-alone_** [oakink](https://github.com/oakink/OakInk) env is already installed, you just need to install the extra packages required for image benchmark.
+### Option 2. Install extra packages in existing `oakink` conda env
+
+If a **_stand-alone_** `oakink` env is already installed, you need to install the extra packages required for image benchmark.
 
 ```bash
 conda activate oakink
@@ -63,6 +67,8 @@ conda activate oakink
 # comment out `manotorch` and `pytorch3d` in requirements.txt, then run:
 pip install -r requirements.txt
 ```
+
+Also, install our **oikit** in the existing `oakink` conda env (follow the instruction: **_import-as-package_**).
 
 ## Prepare
 
@@ -81,7 +87,7 @@ data
 
 ### Assets
 
-- Download the [`postprocess.zip`](https://www.dropbox.com/s/gowg1zelicon4f5/postprocess.zip?dl=0), unzip and put it under the `assets` directory;
+- Download the `postprocess.zip` at [here](https://www.dropbox.com/s/gowg1zelicon4f5/postprocess.zip?dl=0), unzip and put it under the `assets` directory;
 - Download the `mano_v1_2.zip` from the [MANO website](https://mano.is.tue.mpg.de), unzip the file and create symlink in the `assets` directory;
 
 ```
@@ -100,26 +106,23 @@ assets
 
 ### Pack annotation
 
-We provide a script for packing annotations into a single archive for each sample.
+We provide a script for packing annotations into a single archive for each sample. Run following script:
 
-1. Follow instruction: **_import-as-package_** in [OakInk toolkit](https://github.com/oakink/OakInk), install the **oikit** package in current `oakink-bm-img` conda env.
-2. Run following script.
+```bash
+# mode_split and data_split has following options:
 
-   ```bash
-    # mode_split and data_split has following options:
+# mode_split:
+#    "default"            SP0, view split, one view per sequence as test;
+#    "subject"            SP1, subject split, subjects recorded in the test will not appear in the train split;
+#    "object"             SP2, objects split, objects recorded in the test will not appear in the train split;
+#    ------------
+#    "handobject"         view split, similar to SP0, but filter out frames that the min distance between hand and object is greater than 5 mm;
 
-    # mode_split:
-    #    "default"            SP0, view split, one view per sequence as test;
-    #    "subject"            SP1, subject split, subjects recorded in the test will not appear in the train split;
-    #    "object"             SP2, objects split, objects recorded in the test will not appear in the train split;
-    #    ------------
-    #    "handobject"         view split, similar to SP0, but filter out frames that the min distance between hand and object is greater than 5 mm;
+# data_split:
+#    all, train+val, test, train, val
 
-    # data_split:
-    #    all, train+val, test, train, val
-
-   python dev/pack_oakink_image.py --mode_split default --data_split train+val
-   ```
+python dev/pack_oakink_image.py --mode_split default --data_split train+val
+```
 
 ## Model Zoo
 
@@ -141,7 +144,7 @@ We provide a script for packing annotations into a single archive for each sampl
 
 :bulb: Download the corresponding checkpoint from the [Model Zoo](#model-zoo), and put it under the `exp` directory.
 
-### [Integral Pose](https://github.com/JimmySuen/integral-human-pose) + IKNet
+### Integral Pose [(link)](https://github.com/JimmySuen/integral-human-pose) + IKNet
 
 heatmap-based methods, output 21 keypoints, we use an extra IKNet trained in [HandTailor](https://github.com/LyuJ1998/HandTailor) for generating mesh.  
 The results will be saved at `./exp/{exp_id}_{localtime}/`.
@@ -172,7 +175,7 @@ python -m train.test_model_hand_tailor \
     --exp_id eval_oakink_h_sp2_integral_pose
 ```
 
-### [Res-Loglikelihood-Estimation](https://github.com/Jeff-sjtu/res-loglikelihood-regression) + HandTailor
+### Res-Loglikelihood-Estimation [(link)](https://github.com/Jeff-sjtu/res-loglikelihood-regression) + HandTailor
 
 regression-based method, output 21 keypoints, we use an extra IKNet trained in [HandTailor](https://github.com/LyuJ1998/HandTailor) for generating mesh.
 
@@ -202,7 +205,7 @@ python -m train.test_model_hand_tailor \
     --exp_id eval_oakink_h_sp2_res_loglike
 ```
 
-### [I2L-MeshNet](https://github.com/mks0601/I2L-MeshNet_RELEASE)
+### I2L-MeshNet [(link)](https://github.com/mks0601/I2L-MeshNet_RELEASE)
 
 ```bash
 ## SP0
