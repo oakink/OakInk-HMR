@@ -21,4 +21,4 @@ tensorboard~=2.9.1
 tqdm
 termcolor
 manotorch@git+https://github.com/lixiny/manotorch.git
-pytorch3d@git+https://github.com/facebookresearch/pytorch3d@v0.7.1
+pytorch3d@git+https://github.com/facebookresearch/pytorch3d@v0.7.2
