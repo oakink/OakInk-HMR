@@ -106,7 +106,7 @@ python dev/pack_oakink_image.py --mode_split default --data_split train+val
 | I2L-MeshNet  | :heavy_multiplication_x: | SP1   | 12.92 | 0.745   | 12.73 | 6.54     | 6.46     | [cfg](config/oii/train_i2l_meshnet_oii_sp1.yml)   |
 | I2L-MeshNet  | :heavy_multiplication_x: | SP2   | 9.29  | 0.818   | 9.23  | 5.12     | 5.20     | [cfg](config/oii/train_i2l_meshnet_oii_sp2.yml)   |
 
-Download the corresponding checkpoint from the [Google Drive](https://drive.google.com/drive/folders/1KSXXO_OmhOXiuPowkATrhx4Bp9UBGKTf?usp=sharing), and put it under the `./exp` directory.
+Download the corresponding checkpoint from the [Hugging Face](https://huggingface.co/oakink/OakInk-v1-HMR/tree/main), and put it under the `./exp` directory.
 
 ## Evaluation
 
